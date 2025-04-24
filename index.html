@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Digital Pass</title>
+
+  <link rel="manifest" href="/manifest.json" />
+  <meta name="theme-color" content="#000000" />
+
+  <!-- OneSignal SDK -->
+  <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
+  <script>
+    window.OneSignalDeferred = window.OneSignalDeferred || [];
+    OneSignalDeferred.push(async function(OneSignal) {
+      await OneSignal.init({
+        appId: "628ef714-d0d0-43a7-81ce-546614019df4",
+      });
+    });
+  </script>
+</head>
+<body>
+
+  <h1>Your Digital Pass</h1>
+  <p>Name: John Doe</p>
+  <p>Valid Until: 2025-06-30</p>
+  <img src="https://api.qrserver.com/v1/create-qr-code/?data=https://example.com/pass/john" alt="QR Code" />
+
+  <!-- Service Worker -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/sw.js').then(function() {
+        console.log("Service Worker registered");
+      });
+    }
+  </script>
+
+</body>
+</html>
