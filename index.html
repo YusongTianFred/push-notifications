@@ -5,17 +5,35 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>My Digital Pass</title>
 
+  <!-- Link to PWA manifest -->
   <link rel="manifest" href="/manifest.json" />
   <meta name="theme-color" content="#000000" />
 
-  <!-- OneSignal SDK -->
+  <!-- OneSignal SDK (v16) -->
   <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
   <script>
     window.OneSignalDeferred = window.OneSignalDeferred || [];
     OneSignalDeferred.push(async function(OneSignal) {
+      // Initialize OneSignal
       await OneSignal.init({
-        appId: "628ef714-d0d0-43a7-81ce-546614019df4",
+        appId: "628ef714-d0d0-43a7-81ce-546614019df4", // Replace with your actual App ID
+        notifyButton: {
+          enable: true // Shows a floating bell icon for user to subscribe
+        },
+        promptOptions: {
+          actionMessage: "We'd like to send you reminders.",
+          acceptButtonText: "Allow",
+          cancelButtonText: "No thanks"
+        }
       });
+
+      // Actively request push permission
+      const permission = await OneSignal.Notifications.requestPermission();
+      console.log("Notification permission:", permission);
+
+      // Check and print user ID (should NOT be null)
+      const userId = await OneSignal.User.getId();
+      console.log("OneSignal User ID:", userId);
     });
   </script>
 </head>
@@ -26,14 +44,31 @@
   <p>Valid Until: 2025-06-30</p>
   <img src="https://api.qrserver.com/v1/create-qr-code/?data=https://example.com/pass/john" alt="QR Code" />
 
-  <!-- Service Worker -->
+  <!-- Optional: Debug button to check subscription -->
+  <button onclick="checkSubscription()">Check Subscription</button>
+  <script>
+    function checkSubscription() {
+      window.OneSignalDeferred.push(async function(OneSignal) {
+        const permission = await OneSignal.Notifications.permission;
+        const userId = await OneSignal.User.getId();
+        console.log("Permission:", permission);
+        console.log("User ID:", userId);
+        alert(`Permission: ${permission}\nUser ID: ${userId || "Not registered"}`);
+      });
+    }
+  </script>
+
+  <!-- Register Service Worker -->
   <script>
     if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('/sw.js').then(function() {
-        console.log("Service Worker registered");
+      navigator.serviceWorker.register('/sw.js').then(() => {
+        console.log("Service Worker registered successfully");
+      }).catch(error => {
+        console.error("Service Worker registration failed:", error);
       });
     }
   </script>
 
 </body>
+</html>
 </html>
