@@ -34,9 +34,10 @@
       const permission = await OneSignal.Notifications.requestPermission();
       console.log("Notification permission:", permission);
 
-      // Check and print user ID (should NOT be null)
-      const userId = await OneSignal.User.getId();
-      console.log("OneSignal User ID:", userId);
+        // Check and print user ID (should NOT be null)
+        const user = await OneSignal.User.getCurrent();
+        const userId = user?.id;
+        console.log("OneSignal User ID:", userId);
     });
   </script>
 </head>
@@ -53,21 +54,11 @@
     function checkSubscription() {
       window.OneSignalDeferred.push(async function(OneSignal) {
         const permission = await OneSignal.Notifications.permission;
-        const userId = await OneSignal.User.getId();
+        const user = await OneSignal.User.getCurrent();
+        const userId = user?.id;        
         console.log("Permission:", permission);
         console.log("User ID:", userId);
         alert(`Permission: ${permission}\nUser ID: ${userId || "Not registered"}`);
-      });
-    }
-  </script>
-
-  <!-- Register Service Worker -->
-  <script>
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('/sw.js').then(() => {
-        console.log("Service Worker registered successfully");
-      }).catch(error => {
-        console.error("Service Worker registration failed:", error);
       });
     }
   </script>
