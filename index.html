@@ -10,7 +10,7 @@
   <meta name="theme-color" content="#000000" />
 
   <!-- OneSignal SDK (v16) -->
-  <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.sw.js" defer></script>
+  <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
   <script>
     window.OneSignalDeferred = window.OneSignalDeferred || [];
     OneSignalDeferred.push(async function(OneSignal) {
@@ -20,11 +20,14 @@
         notifyButton: {
           enable: true // Shows a floating bell icon for user to subscribe
         },
+
+        
         promptOptions: {
           actionMessage: "We'd like to send you reminders.",
           acceptButtonText: "Allow",
           cancelButtonText: "No thanks"
         }
+        
       });
 
       // Actively request push permission
@@ -70,5 +73,4 @@
   </script>
 
 </body>
-</html>
 </html>
